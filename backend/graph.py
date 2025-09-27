@@ -60,9 +60,37 @@ class Graph:
         for u, v, d in self.graph.edges(data=True):
             graphviz.get_edge(u, v).attr['label'] = d['weight']
 
-        graphviz.draw('graph.png', prog='dot', format='png')
-        os.startfile('graph.png')
+        output_dir = os.path.join(os.getcwd(), 'frontend', 'public')
+        os.makedirs(output_dir, exist_ok=True)
+        output_path = os.path.join(output_dir, 'graph.png')
+
+        graphviz.draw(output_path, prog='dot', format='png')
+        os.startfile(output_path)
         print('plotted')
+
+    def draw_tsp(self, path):
+        graphviz = nx.drawing.nx_agraph.to_agraph(self.graph)
+
+        nodelist = list(path)
+        # pathlist = [(nodelist[i], nodelist[i+1]) for i in range(len(nodelist)-1)]
+
+        for i in range(len(nodelist)-1):
+            graphviz.get_node(nodelist[i]).attr['fillcolor'] = 'red'
+            edge = graphviz.get_edge(nodelist[i], nodelist[i+1])
+            edge.attr['color'] = 'red'
+            edge.attr['width'] = 3
+        graphviz.get_node(nodelist[len(nodelist)-1]).attr['fillcolor'] = 'red'
+
+        output_dir = os.path.join(os.getcwd(), 'frontend', 'public')
+        os.makedirs(output_dir, exist_ok=True)
+        output_path = os.path.join(output_dir, 'tsp.png')
+
+        graphviz.draw(output_path, prog='dot', format='png')
+        os.startfile('tsp.png')
+        print('solved')
+
+            
+
 
 
 

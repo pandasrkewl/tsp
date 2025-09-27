@@ -126,6 +126,7 @@ class TSP:
         print(f"After {n+1} generations, the shortest path found is:")
         print(self.population[0])
         print("Weight:", self.path_length(self.population[0]))
+        return self.population[0]
 
     
         
@@ -180,7 +181,7 @@ edges = (('A', 'B', 2),
 
 g = graph.Graph(edges)
 tsp = TSP(g, 'E', generations = 100)
-#print(g.edges)
-tsp.run_tsp()
-g.plot_graph()
+answer = tsp.run_tsp()
+g.draw_tsp(answer)
+# g.plot_graph()
 
