@@ -11,6 +11,9 @@ class Graph:
         self.graph.add_weighted_edges_from(edges)  
         self.nodes = self.graph.nodes   
         self.edges = self.edge_table(edges)
+        self.visualized = nx.drawing.nx_agraph.to_agraph(self.graph)
+        for u, v, d in self.graph.edges(data=True):
+            self.visualized.get_edge(u, v).attr['label'] = d['weight']
 
     def edge_table(self, edges):
 
@@ -32,7 +35,7 @@ class Graph:
             print(row)
 
 
-    def plot_graph(self):
+    def plot_graph(self, openfile):
         '''
             Description: Plots the graph in a circular set of nodes
             INPUT: None
@@ -56,20 +59,20 @@ class Graph:
         # nx.draw_networkx_edge_labels(self.graph, pos, edge_labels = labels)
         # plt.show()'''
 
-        graphviz = nx.drawing.nx_agraph.to_agraph(self.graph)
-        for u, v, d in self.graph.edges(data=True):
-            graphviz.get_edge(u, v).attr['label'] = d['weight']
-
         output_dir = os.path.join(os.getcwd(), 'frontend', 'public')
         os.makedirs(output_dir, exist_ok=True)
         output_path = os.path.join(output_dir, 'graph.png')
 
-        graphviz.draw(output_path, prog='dot', format='png')
-        os.startfile(output_path)
+        self.visualized.draw(output_path, prog='dot', format='png')
+        if openfile:
+            os.startfile(output_path)
         print('plotted')
 
-    def draw_tsp(self, path):
-        graphviz = nx.drawing.nx_agraph.to_agraph(self.graph)
+
+    #https://stackoverflow.com/questions/24024411/highlighting-the-shortest-path-in-a-networkx-graph
+    def draw_tsp(self, path, openfile):
+            
+        graphviz = self.visualized
 
         nodelist = list(path)
         # pathlist = [(nodelist[i], nodelist[i+1]) for i in range(len(nodelist)-1)]
@@ -86,7 +89,8 @@ class Graph:
         output_path = os.path.join(output_dir, 'tsp.png')
 
         graphviz.draw(output_path, prog='dot', format='png')
-        os.startfile('tsp.png')
+        if openfile:
+            os.startfile(output_path)
         print('solved')
 
             

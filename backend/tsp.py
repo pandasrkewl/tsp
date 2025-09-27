@@ -181,7 +181,7 @@ edges = (('A', 'B', 2),
 
 g = graph.Graph(edges)
 tsp = TSP(g, 'E', generations = 100)
-answer = tsp.run_tsp()
+answer = tsp.run_tsp(False)
+g.plot_graph(False)
 g.draw_tsp(answer)
-# g.plot_graph()
 
